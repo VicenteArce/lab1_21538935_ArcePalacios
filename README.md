@@ -5,4 +5,4 @@
 ## Descripción
 
 ## Prerrequisitos
-Para el presente laboratorio se requiere del programa Dr.Racket 8.10, en caso de no tener instalado el programa, puede dirigirse al siguiente enlace (https://download.racket-lang.org/).
+Para el presente laboratorio se requiere del programa Dr.Racket 8.10, en caso de no tener instalado el programa puede dirigirse al siguiente enlace (https://download.racket-lang.org/).
