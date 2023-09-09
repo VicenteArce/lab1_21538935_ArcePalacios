@@ -1,5 +1,5 @@
 #lang racket
-
+(provide (all-defined-out))
 ;(define op1 (option 1 "1) Viajar" 2 4 "viajar" "turistear" "conocer"))
 ;(define op2 (option 2 "2) Estudiar" 4 3 "aprender" "perfeccionarme"))
 
