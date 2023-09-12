@@ -3,16 +3,39 @@
 (require "TDA_Option_21538935_ArcePalacios.rkt")
 
 
-;------------------Constructor------------------
+;------------------------Otra función------------------------
+;Nombre funcion: reps-option?
+;Dominio: lista (para este caso la lista que se recibira sera la de opciones, esto para descartar opciones repetidas
+;Recorrido: Booleano
+;Recursión: De cola
+;Descripción: Esta funcion sirve para verificar si existen elementos repetidos en una lista, para este caso, sirve para verificar si
+;             las opciones a agregar tienen el mismo id o no, es decir, retorna #t en el caso de que existan elementos iguales,
+;             retorna #f en el caso de que no existan elementos iguales en la lista.
+
+(define (reps-option? lista)
+  (define (aux element lista)
+    (cond
+      ((null? lista) #f) 
+      ((equal? element (car lista)) #t) 
+      (else (aux element (cdr lista))))) 
+  (cond
+    ((null? lista) #f) ;
+    ((aux (car lista) (cdr lista)) #t) 
+    (else (reps-option? (cdr lista))))) 
+
+
+;------------------------Constructor------------------------
 ;Nombre función: flow
 ;Dominio: name(String) X Option(0 o más opciones)
 ;Recorrido: flow
-;Recursión: No aplica
+;Recursión: No aplica?? (uso de la funcion reps-option? que usa recursion de cola)
 ;Descripción: Esta función toma argumentos asociados a un flujo, y retorna el flujo.
-(define (flow name . Option)
-      (list 1 name Option)) ;El 1 es el ID, de momento esta como PLACEHOLDER
+(define (flow id name . Option)
+  (if (and (integer? id) (string? name) (list? Option) (not (reps-option? (map car Option))))  ;Si estan bien los datos ingresados, entonces se crea la lista
+      (list id name Option)
+      (display "Error, los datos son erroneos asegurate de que tus tipos de datos sean correctos o verifica si las opciones no son repetidas")))
 
-;-------------------Selectores-------------------
+;------------------------Selectores------------------------
 ;Nombre función: get-id-flow
 ;Dominio: flow
 ;Recorrido: id(int)
@@ -38,7 +61,7 @@
 (define get-Option-flow (lambda (flujo) (caddr flujo)))
 
 
-;--------------------Modificadores-----------------
+;------------------------Modificadores------------------------
 ;Nombre: flow-add-option
 ;Dominio: flow X Option
 ;Recorrido: flow (modificado)
@@ -47,12 +70,15 @@
 ;siendo esta ultima agregada al flujo, retornando un flujo con la nueva opción
 (define flow-add-option
   (lambda (flujo op)
-    (append (list (get-id-flow flujo))
-            (list (get-name-flow flujo))
-            (list (reverse (cons op (reverse (get-Option-flow flujo))))))))
+    (if (not (member (get-code-option op) (map car (get-Option-flow flujo))))
+        (append (list (get-id-flow flujo))
+                (list (get-name-flow flujo))
+                (list (append (get-Option-flow flujo) (list op))))
+        (display "Error, la opción ya esta en el flujo"))))
+        
 
 
-;(define op1 (option 1 "1) Viajar" 2 4 "viajar" "turistear" "conocer"))
-;(define op2 (option 2 "2) Estudiar" 4 3 "aprender" "perfeccionarme"))
-;(define f10 (flow  "Flujo1"))
+
+
+
 
