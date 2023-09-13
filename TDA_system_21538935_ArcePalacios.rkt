@@ -99,12 +99,12 @@
 (define system-add-chatbot
   (lambda (system chatbot)
     (if (not (member (get-id-chatbot chatbot) (map get-id-chatbot (get-chatbots-system system))))
-        (append (list get-name-system system)
-                (list get-InitialChatbotCodeLink-system system)
+        (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
                 (list (append (get-chatbots-system system) (list chatbot)))
-                (list get-chatHistory-system system)
-                (list get-users-system system)
-                (list get-logUsers-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (get-logUsers-system system)))
         (display "El chatbot que intentas introducir ya se encuentra en el sistema"))))
 
 ;Nombre función: system-add-user
@@ -116,12 +116,12 @@
 (define system-add-user
   (lambda (system user)
     (if (not (member user (get-users-system system)))
-        (append (list get-name-system system)
-                (list get-InitialChatbotCodeLink-system system)
-                (list get-chatbots-system system)
-                (list get-chatHistory-system system)
+        (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
                 (list (append (get-users-system system) (list user)))
-                (list get-logUsers-system system))
+                (list (get-logUsers-system system)))
         (display "Error, el usuario ya se encuentra en el sistema"))))
 
 ;Nombre función: system-login
@@ -132,12 +132,12 @@
 
 (define system-login
   (lambda (system user)
-    (if (and (member user (get-users-system system)) (empty? (get-logUsers-system)))
-        (append (list get-name-system system)
-                (list get-InitialChatbotCodeLink-system system)
-                (list get-chatbots-system system)
-                (list get-chatHistory-system system)
-                (list get-users-system system)
+    (if (and (member user (get-users-system system)) (empty? (get-logUsers-system system)))
+        (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
                 (list (append (get-logUsers-system system) (list user))))
         (display "Error, puede que el usuario no este registrado o ya hay un usuario logueado"))))
 
@@ -150,13 +150,35 @@
 
 (define system-logout
   (lambda (system)
-    (append (list get-name-system system)
-            (list get-InitialChatbotCodeLink-system system)
-            (list get-chatbots-system system)
-            (list get-chatHistory-system system)
-            (list get-users-system system)
-            (list ))))
+    (append (list (get-name-system system))
+            (list (get-InitialChatbotCodeLink-system system))
+            (list (get-chatbots-system system))
+            (list (get-chatHistory-system system))
+            (list (get-users-system system))
+            (list (cdr (get-logUsers-system system))))))
 
+(define op1 (option 1 "1) Viajar" 2 4 "viajar" "turistear" "conocer"))
+(define op2 (option 2 "2) Estudiar" 4 3 "aprender" "perfeccionarme"))
 
+(define f10 (flow 1 "Flujo1"))
 
+(define f11 (flow-add-option f10 op1))
+(define f12 (flow-add-option f11 op2))
+(define cb11  (chatbot 0 "Asistente" "Bienvenido\n¿Qué te gustaría hacer?" f12))
+
+#|
+(define s0 (system "NewSystem" 0))
+s0
+(define s1 (system-add-chatbot s0 cb11))
+
+(define s2 (system-add-user s1 "user0"))
+
+(define s3 (system-add-user s2 "user1"))
+
+(define s4 (system-login s3 "user0"))
+
+(define s5 (system-logout s4))
+
+(define s6 (system-login s5 "user1"))
+|#
 
