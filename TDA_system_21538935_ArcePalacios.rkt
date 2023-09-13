@@ -103,7 +103,8 @@
                 (list get-InitialChatbotCodeLink-system system)
                 (list (append (get-chatbots-system system) (list chatbot)))
                 (list get-chatHistory-system system)
-                (list get-users-system system))
+                (list get-users-system system)
+                (list get-logUsers-system system))
         (display "El chatbot que intentas introducir ya se encuentra en el sistema"))))
 
 ;Nombre función: system-add-user
@@ -119,14 +120,43 @@
                 (list get-InitialChatbotCodeLink-system system)
                 (list get-chatbots-system system)
                 (list get-chatHistory-system system)
-                (list (append (get-users-system system) (list user))))
+                (list (append (get-users-system system) (list user)))
+                (list get-logUsers-system system))
         (display "Error, el usuario ya se encuentra en el sistema"))))
 
 ;Nombre función: system-login
 ;Dominio: system X user(String)
 ;Recorrido: system
-;Recursión:
-;Descripción: 
+;Recursión: no aplica
+;Descripción: Retorna el mismo sistema pero logueando en el sistema el usuario dado, esto ocurre solo si el usuario esta registrado y si no hay ningun usuario registrado
+
+(define system-login
+  (lambda (system user)
+    (if (and (member user (get-users-system system)) (empty? (get-logUsers-system)))
+        (append (list get-name-system system)
+                (list get-InitialChatbotCodeLink-system system)
+                (list get-chatbots-system system)
+                (list get-chatHistory-system system)
+                (list get-users-system system)
+                (list (append (get-logUsers-system system) (list user))))
+        (display "Error, puede que el usuario no este registrado o ya hay un usuario logueado"))))
+
+
+;Nombre función: system-logout
+;Dominio: system 
+;Recorrido: system
+;Recursión: no aplica
+;Descripción: Retorna el mismo sistema pero sin usuarios logueados
+
+(define system-logout
+  (lambda (system)
+    (append (list get-name-system system)
+            (list get-InitialChatbotCodeLink-system system)
+            (list get-chatbots-system system)
+            (list get-chatHistory-system system)
+            (list get-users-system system)
+            (list ))))
+
 
 
 
