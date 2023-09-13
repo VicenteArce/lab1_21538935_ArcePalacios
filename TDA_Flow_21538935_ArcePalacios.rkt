@@ -70,7 +70,7 @@
 ;siendo esta ultima agregada al flujo, retornando un flujo con la nueva opción
 (define flow-add-option
   (lambda (flujo op)
-    (if (not (member (get-code-option op) (map car (get-Option-flow flujo))))
+    (if (not (member (get-code-option op) (map get-code-option (get-Option-flow flujo))))
         (append (list (get-id-flow flujo))
                 (list (get-name-flow flujo))
                 (list (append (get-Option-flow flujo) (list op))))

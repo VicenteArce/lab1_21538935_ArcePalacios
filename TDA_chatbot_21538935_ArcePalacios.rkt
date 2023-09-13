@@ -5,13 +5,13 @@
 
 
 
-;------------------------Otra función------------------------
+;------------------------Otras funciones------------------------
 ;Nombre funcion:reps-flow?
 ;Dominio: lista (para este caso la lista que se recibira sera la de flujos, esto para descartar flujos repetidos
 ;Recorrido: Booleano
 ;Recursión: De cola
 ;Descripción: Esta funcion sirve para verificar si existen elementos repetidos en una lista, para este caso, sirve para verificar si
-;             las opciones a agregar tienen el mismo id o no, es decir, retorna #t en el caso de que existan elementos iguales,
+;             los flujos a agregar tienen el mismo id o no, es decir, retorna #t en el caso de que existan elementos iguales,
 ;             retorna #f en el caso de que no existan elementos iguales en la lista.
 
 (define (reps-flow? lista)
@@ -89,18 +89,20 @@
 ;Nombre función: chatbot-add-flow
 ;Dominio: chatbot X flow
 ;Recorrido: chatbot 
-;Recursión: de cola
+;Recursión: de cola (append-final)
 ;Descripción: Función que toma un chatbot y un flujo, al ser llamada esta función se creara un chatbot identico al anterior pero agregando el flujo que se le pase.
 
 (define chatbot-add-flow
   (lambda (chatbot flow)
-    (if (not (member (get-id-flow flow) (map car (get-flows-chatbot chatbot))))
+    (if (not (member (get-id-flow flow) (map get-id-flow (get-flows-chatbot chatbot))))
         (append (list (get-id-chatbot chatbot))
                 (list (get-name-chatbot chatbot))
                 (list (get-welcomeMessage-chatbot chatbot))
                 (list(append-final flow (get-flows-chatbot chatbot))))
         (display "Error, el flujo que intentas añadir ya se encuentra en el chatbot")
         )))
+
+
 
 
 ;(define op1 (option 1 "1) Viajar" 2 4 "viajar" "turistear" "conocer"))
