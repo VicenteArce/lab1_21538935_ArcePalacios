@@ -34,8 +34,8 @@
 ;Descripción: Función constructora de sistemas que contienen chatbots, historial de chats y usuarios
 
 (define (system name InitialChatbotCodeLink . chatbot)
-  (if (and (string? name) (integer? InitialChatbotCodeLink) (list? chatbot) (not (reps-chatbot? (map car chatbot))))
-      (list name InitialChatbotCodeLink chatbot '() '() '()) ;Las tres listas vacias son: chatHistory, usuarios en el sistema, usuarios logeados
+  (if (and (string? name) (integer? InitialChatbotCodeLink) (list? chatbot) )
+      (list name InitialChatbotCodeLink (remove-duplicates chatbot) '() '() '()) ;Las tres listas vacias son: chatHistory, usuarios en el sistema, usuarios logeados
       (display "Error, ingresa bien los datos")))
 
 ;------------------------Selectores------------------------
@@ -105,7 +105,12 @@
                 (list (get-chatHistory-system system))
                 (list (get-users-system system))
                 (list (get-logUsers-system system)))
-        (display "El chatbot que intentas introducir ya se encuentra en el sistema"))))
+        (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))))))
 
 ;Nombre función: system-add-user
 ;Dominio: system X user(String)
@@ -122,7 +127,12 @@
                 (list (get-chatHistory-system system))
                 (list (append (get-users-system system) (list user)))
                 (list (get-logUsers-system system)))
-        (display "Error, el usuario ya se encuentra en el sistema"))))
+        (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))))))
 
 ;Nombre función: system-login
 ;Dominio: system X user(String)
@@ -139,7 +149,12 @@
                 (list (get-chatHistory-system system))
                 (list (get-users-system system))
                 (list (append (get-logUsers-system system) (list user))))
-        (display "Error, puede que el usuario no este registrado o ya hay un usuario logueado"))))
+        (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))))))
 
 
 ;Nombre función: system-logout
@@ -157,28 +172,6 @@
             (list (get-users-system system))
             (list (cdr (get-logUsers-system system))))))
 
-(define op1 (option 1 "1) Viajar" 2 4 "viajar" "turistear" "conocer"))
-(define op2 (option 2 "2) Estudiar" 4 3 "aprender" "perfeccionarme"))
 
-(define f10 (flow 1 "Flujo1"))
 
-(define f11 (flow-add-option f10 op1))
-(define f12 (flow-add-option f11 op2))
-(define cb11  (chatbot 0 "Asistente" "Bienvenido\n¿Qué te gustaría hacer?" f12))
-
-#|
-(define s0 (system "NewSystem" 0))
-s0
-(define s1 (system-add-chatbot s0 cb11))
-
-(define s2 (system-add-user s1 "user0"))
-
-(define s3 (system-add-user s2 "user1"))
-
-(define s4 (system-login s3 "user0"))
-
-(define s5 (system-logout s4))
-
-(define s6 (system-login s5 "user1"))
-|#
 

@@ -3,37 +3,16 @@
 (require "TDA_Option_21538935_ArcePalacios.rkt")
 
 
-;------------------------Otra función------------------------
-;Nombre funcion: reps-option?
-;Dominio: lista (para este caso la lista que se recibira sera la de opciones, esto para descartar opciones repetidas
-;Recorrido: Booleano
-;Recursión: De cola
-;Descripción: Esta funcion sirve para verificar si existen elementos repetidos en una lista, para este caso, sirve para verificar si
-;             las opciones a agregar tienen el mismo id o no, es decir, retorna #t en el caso de que existan elementos iguales,
-;             retorna #f en el caso de que no existan elementos iguales en la lista.
-
-(define (reps-option? lista)
-  (define (aux element lista)
-    (cond
-      ((null? lista) #f) 
-      ((equal? element (car lista)) #t) 
-      (else (aux element (cdr lista))))) 
-  (cond
-    ((null? lista) #f) ;
-    ((aux (car lista) (cdr lista)) #t) 
-    (else (reps-option? (cdr lista))))) 
-
-
 ;------------------------Constructor------------------------
 ;Nombre función: flow
 ;Dominio: name(String) X Option(0 o más opciones)
 ;Recorrido: flow
-;Recursión: No aplica?? (uso de la funcion reps-option? que usa recursion de cola)
+;Recursión: No aplica
 ;Descripción: Esta función toma argumentos asociados a un flujo, y retorna el flujo.
 (define (flow id name . Option)
-  (if (and (integer? id) (string? name) (list? Option) (not (reps-option? (map car Option))))  ;Si estan bien los datos ingresados, entonces se crea la lista
-      (list id name Option)
-      (display "Error, los datos son erroneos asegurate de que tus tipos de datos sean correctos o verifica si las opciones no son repetidas")))
+  (if (and (integer? id) (string? name) (list? Option))  ;Si estan bien los datos ingresados, entonces se crea la lista
+      (list id name (remove-duplicates Option))
+      (display "Error, los datos son erroneos asegurate de que tus tipos de datos sean correctos.")))
 
 ;------------------------Selectores------------------------
 ;Nombre función: get-id-flow
@@ -74,7 +53,9 @@
         (append (list (get-id-flow flujo))
                 (list (get-name-flow flujo))
                 (list (append (get-Option-flow flujo) (list op))))
-        (display "Error, la opción ya esta en el flujo"))))
+        (append (list (get-id-flow flujo))
+                (list (get-name-flow flujo))
+                (list (get-Option-flow flujo))))))
         
 
 
