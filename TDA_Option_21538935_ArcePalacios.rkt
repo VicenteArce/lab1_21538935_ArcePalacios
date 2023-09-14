@@ -5,14 +5,14 @@
 
 ;------------------------Constructor------------------------
 ;Nombre función: option
-;Dominio: code(int) X message(String) X ChatbotCodeLink(int) X FlowCodeLink(int) X Keywords(0 o más palabras claves)
+;Dominio: code(int) X message(String) X ChatbotCodeLink(int) X FlowCodeLink(int) X Keyword(0 o más palabras claves)
 ;Recorrido: option
 ;Recursión: No aplica
-;Descripción: Esta función toma argumentos asociados a una opcion, como podrian ser el codigo de la opción, a su vez retorna una opción como una lista.
-(define (option code message ChatbotCodeLink  FlowCodeLink . Keywords)
-  (if (and (integer? code) (string? message) (integer? ChatbotCodeLink) (integer? FlowCodeLink) (list? Keywords)) ;Comparacion trivial de tipos de datos
-      (list code message ChatbotCodeLink FlowCodeLink Keywords)
-      (display "ERROR, ingresa bien los datos")))
+;Descripción: Esta función toma argumentos asociados a una opción, como podrian ser el codigo de la opción, a su vez retorna una opción como una lista.
+(define (option code message ChatbotCodeLink  FlowCodeLink . Keyword)
+  (if (and (integer? code) (string? message) (integer? ChatbotCodeLink) (integer? FlowCodeLink) (list? Keyword)) 
+      (list code message ChatbotCodeLink FlowCodeLink Keyword)
+      (display "Error, ingresa bien los datos")))
 
 ;------------------------Selectores------------------------
 ;Nombre función: get-code-option
@@ -52,7 +52,7 @@
 ;Dominio: option
 ;Recorrido: Keywords(lista)
 ;Recursión: No aplica
-;Descripción: Retorna la lista de palabras claves
+;Descripción: Retorna la lista de palabras claves de la opción
 (define (get-Keywords-option option)
   (cadddr (cdr option)))
 

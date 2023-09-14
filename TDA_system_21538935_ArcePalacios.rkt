@@ -6,25 +6,16 @@
 
 
 
-;------------------------Otras funciones------------------------
-;Nombre funcion:reps-chatbot?
-;Dominio: lista (para este caso la lista que se recibira sera la de chatbots, esto para descartar chatbots repetidos en el sistema
-;Recorrido: Booleano
-;Recursión: De cola
-;Descripción: Esta funcion sirve para verificar si existen elementos repetidos en una lista, para este caso, sirve para verificar si
-;             los chatbots a agregar tienen el mismo id o no, es decir, retorna #t en el caso de que existan elementos iguales,
-;             retorna #f en el caso de que no existan elementos iguales en la lista.
 
-(define (reps-chatbot? lista)
-  (define (aux element lista)
-    (cond
-      ((null? lista) #f) 
-      ((equal? element (car lista)) #t) 
-      (else (aux element (cdr lista))))) 
-  (cond
-    ((null? lista) #f) ;
-    ((aux (car lista) (cdr lista)) #t) 
-    (else (reps-chatbot? (cdr lista)))))
+;------------------------Otras funciones------------------------
+;Nombre función: equal-first-chatbotID?
+;Dominio: l1 (lista) X l2 (lista)
+;Recorrido: bool
+;Recursión: no applica
+;Descripción: Funcion que compara los primeros dos elementos de una lista, función declarada para ser usada en el constructor del chatbot
+;         Sirve en conjunto a la funcion remove-duplicates para la verificación de un id unico de un flujo en un chatbot.
+(define (equal-first-chatbotID? l1 l2)
+  (equal? (get-chatbotID-chatbot l1) (get-chatbotID-chatbot l2)))
 
 ;------------------------Constructor------------------------
 ;Nombre de Función: system
@@ -35,7 +26,7 @@
 
 (define (system name InitialChatbotCodeLink . chatbot)
   (if (and (string? name) (integer? InitialChatbotCodeLink) (list? chatbot) )
-      (list name InitialChatbotCodeLink (remove-duplicates chatbot) '() '() '()) ;Las tres listas vacias son: chatHistory, usuarios en el sistema, usuarios logeados
+      (list name InitialChatbotCodeLink (remove-duplicates chatbot equal-first-chatbotID?) '() '() '()) ;Las tres listas vacias son: chatHistory, usuarios en el sistema, usuarios logeados
       (display "Error, ingresa bien los datos")))
 
 ;------------------------Selectores------------------------
@@ -98,7 +89,7 @@
 
 (define system-add-chatbot
   (lambda (system chatbot)
-    (if (not (member (get-id-chatbot chatbot) (map get-id-chatbot (get-chatbots-system system))))
+    (if (not (member (get-chatbotID-chatbot chatbot) (map get-chatbotID-chatbot (get-chatbots-system system))))
         (append (list (get-name-system system))
                 (list (get-InitialChatbotCodeLink-system system))
                 (list (append (get-chatbots-system system) (list chatbot)))
@@ -116,7 +107,7 @@
 ;Dominio: system X user(String)
 ;Recorrido: system
 ;Recursión: no aplica
-;Descripción: Permite la creación de un usuario en un sistema almacenandose en una lista 
+;Descripción: Permite la creación de un usuario en un sistema almacenandose en una lista, a su vez al crearse un usuario, automaticamente se crea un historial de la forma ((user (hist))(user2 (hist2))
 
 (define system-add-user
   (lambda (system user)

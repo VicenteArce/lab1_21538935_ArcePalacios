@@ -7,9 +7,11 @@
 (require "TDA_system_21538935_ArcePalacios.rkt")
 
 
+
 ;----------------Definiendo opciones------------------------------
 (define op1 (option  1 "1) Viajar" 2 1 "viajar" "turistear" "conocer"))
 (define op2 (option  2 "2) Estudiar" 3 1 "estudiar" "aprender" "perfeccionarme"))
+
 
 ;----------------Definiendo flujos--------------------------------
 (define f10 (flow 1 "flujo1" op1 op2 op2 op2 op2 op1)) ;solo añade una ocurrencia de op2
@@ -17,7 +19,6 @@
 
 ;----------------Definiendo chatbot Paradigmas--------------------
 (define cb0 (chatbot 0 "Inicial" "Bienvenido\n¿Qué te gustaría hacer?" f10 f10 f10 f10))  ;solo añade una ocurrencia de f10
-
 ;----------------Definiendo sistemas y añadiendo usuarios---------
 (define s0 (system "Chatbots Paradigmas" 0 cb0 cb0 cb0))
 (define s1 (system-add-chatbot s0 cb0)) ;igual a s0
