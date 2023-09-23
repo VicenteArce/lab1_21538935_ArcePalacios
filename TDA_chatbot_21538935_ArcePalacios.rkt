@@ -18,7 +18,7 @@
 ;Nombre función: append-final
 ;Dominio; flow X lista(de flujos del chatbot)
 ;Recorrido: chatbot
-;Recursión: de cola
+;Recursión: natural
 ;Descripción: Esta función se llama en el modificador para poder agregar al final de la lista de flujos el nuevo flujo en cuestion
 (define (append-final flujo lista-flujos-chatbot)
   (if (null? lista-flujos-chatbot)
@@ -27,13 +27,13 @@
 
 ;------------------Constructor------------------
 ;Nombre función: chatbot
-;Dominio: chatbotID(int) X name(String) X welcomeMessage(String) X flows(0 o más opciones)
+;Dominio: chatbotID(int) X name(String) X welcomeMessage(String) X startFlowId(int) X flows(0 o más opciones)
 ;Recorrido: chatbot
 ;Recursión: No aplica
 ;Descripción: Esta función toma argumentos asociados a un chatbot, y retorna el chatbot.
-(define (chatbot chatbotID name welcomeMessage . flows)
+(define (chatbot chatbotID name welcomeMessage startFlowId . flows)
   (if (and (integer? chatbotID) (string? name) (string? welcomeMessage) (list? flows))
-      (list chatbotID name welcomeMessage (remove-duplicates flows equal-first-id?))
+      (list chatbotID name welcomeMessage startFlowId (remove-duplicates flows equal-first-id?))
       (display "Error, los datos son erroneos, verifica si los tipos de datos son correctos")))
 
 ;-----------------Selectores--------------------
@@ -64,6 +64,16 @@
   (lambda (cbot)
     (caddr cbot)))
 
+
+;Nombre función: get-initialFlowCode-chatbot
+;Dominio: chatbot
+;Recorrido: initialFlowCode (int)
+;Recursión: No aplica
+;Descripción: Esta función toma como argumento un chatbot y retorna una lista de flujos del chatbot
+(define get-startFlowId-chatbot
+  (lambda (cbot)
+    (cadddr cbot)))
+
 ;Nombre función: get-flows-chatbot
 ;Dominio: chatbot
 ;Recorrido: flujos(lista de 0  o más elementos)
@@ -71,14 +81,14 @@
 ;Descripción: Esta función toma como argumento un chatbot y retorna una lista de flujos del chatbot
 (define get-flows-chatbot
   (lambda (cbot)
-    (cadddr cbot)))
+    (cadddr (cdr cbot))))
 
 
 ;--------------Modificadores-------------------
 ;Nombre función: chatbot-add-flow
 ;Dominio: chatbot X flow
 ;Recorrido: chatbot 
-;Recursión: de cola (append-final)
+;Recursión: natural (llamada a función append-final)
 ;Descripción: Función que toma un chatbot y un flujo, al ser llamada esta función se creara un chatbot identico al anterior pero agregando el flujo que se le pase.
 ;      En caso de que el chatbot ya contenia el flujo (verificado por el id del flujo) entonces se retorna el mismo chatbot que se le ingreso a la función.
 
@@ -88,10 +98,12 @@
         (append (list (get-chatbotID-chatbot chatbot))
                 (list (get-name-chatbot chatbot))
                 (list (get-welcomeMessage-chatbot chatbot))
+                (list (get-startFlowId-chatbot chatbot))
                 (list (append-final flow (get-flows-chatbot chatbot))))
         (append (list (get-chatbotID-chatbot chatbot))
                 (list (get-name-chatbot chatbot))
                 (list (get-welcomeMessage-chatbot chatbot))
+                (list (get-startFlowId-chatbot chatbot))
                 (list (get-flows-chatbot chatbot)))
         )))
 

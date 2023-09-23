@@ -1,0 +1,113 @@
+#lang racket
+
+(provide (all-defined-out))
+(require "TDA_Option_21538935_ArcePalacios.rkt")
+(require "TDA_Flow_21538935_ArcePalacios.rkt")
+(require "TDA_chatbot_21538935_ArcePalacios.rkt")
+(require "TDA_system_21538935_ArcePalacios.rkt")
+(require "TDA_chatHistory_21538935_ArcePalacios.rkt")
+
+;Nombre Función: system-talk-rec
+;Dominio: system X message
+;Recorrido: system
+;Recursión: De cola (Tail Recursion)
+;Descripción: Funcion que toma un sistema y un mensaje, si hay un usuario logeado, entonces se actualizara el sistema, actualizando el actualCbotLink, actualFlowLink y Actualiza el Historial del usuario logeado (String formateado).
+;PD: Cuando en el sistema no hay ningun usuario logeado se devolvera el mismo sistema, si hay un usuario logeado entonces ahi se procedera a incluir las modificaciones, en el chatHistory del usuario logeado.
+;    Ademas, si ya se hizo la llamada a la funcion y se deslogea el usuario, su chatHistory se guardara y el sistema se "reiniciara", para cuando un usuario proceda a logearse el sistema empiece desde 0
+
+(define system-talk-rec
+  (lambda (system message)
+
+    ;Obtiene un chatbot en relacion a un id
+    (define get-CbotByID
+      (lambda (chatbots ID)
+        (if (= (get-chatbotID-chatbot (car chatbots)) ID)
+            (car chatbots)
+            (get-CbotByID (cdr chatbots) ID))))
+
+    ;Obtiene un flujo en relacion a un id
+    (define get-FlowByID
+      (lambda (flows ID)
+        (if (= (get-id-flow (car flows)) ID)
+            (car flows)
+            (get-FlowByID (cdr flows) ID))))
+
+    ;Obtiene una opcion en relacion a un id que en este caso, es el mensaje
+    (define get-OptionByID-STR
+      (lambda (options ID_STR)
+        (if (number? (string->number ID_STR))
+            (if (= (get-code-option (car options)) (string->number ID_STR))
+                (car options)
+                (get-OptionByID-STR (cdr options) ID_STR))
+            (if (member ID_STR (get-Keywords-option (car options)))
+                (car options)
+                (get-OptionByID-STR (cdr options) ID_STR)))))
+
+    ;Funcion que se encarga de dar formato a las opciones 
+    (define get-FormatedOptions
+      (lambda (options)
+        (string-append* (cdr (append* (map (lambda (x) (list "\n " x))
+                                           (map get-message-option options)))))))
+    
+    (if (= (get-actualFlowCodeLink-system system) -1)    ;Se pregunta si se ha usado el sistema
+        (if (not (empty? (get-logUsers-system system)))  ;Si hay usuarios registrados entonces se procede a actualizar el sistema
+            (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (set-chatHistory-Historial (get-chatHistory-system system)
+                                                 (car (get-logUsers-system system))
+                                                 message
+                                                 (get-name-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
+                                                 (get-name-msg-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
+                                                                                  (get-startFlowId-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))))
+                                                 (get-FormatedOptions (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
+                                                                                                     (get-startFlowId-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))))))))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))
+                (list (get-actualChatbotCodeLink-system system))
+                (list (get-startFlowId-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))))
+            
+            (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))
+                (list (get-actualChatbotCodeLink-system system))
+                (list -1)))
+
+        (if (not (empty? (get-logUsers-system system))) ;Como el sistema ya se uso, entonces se tendra en cuenta la actualización de los ChatbotCodeLink Y FlowCodeLink en relacion a la opcion escogida por el usuario (mensaje)
+            (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (set-chatHistory-Historial (get-chatHistory-system system)
+                                                 (car (get-logUsers-system system))
+                                                 message
+                                                 (get-name-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                 (get-name-msg-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                                                  (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                 (get-FormatedOptions (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                                                  (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))))))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))
+                (list (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))
+                (list (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+
+            (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))
+                (list (get-actualChatbotCodeLink-system system))
+                (list -1))))
+    ))
+
+;---------------------------------------------------------------------------------------------------------------------------------------------------
+;Nombre Función: system-synthesis
+;Dominio: system X usuario(String)
+;Recorrido: String (Formateado para ser visualizado con display
+;Recursión: No aplica
+;Descripción: Funcion que retorna el historial como un string de un sistema y usuario dado
+(define (system-synthesis system usuario) 
+    (car (get-chatHistory-Historial (car (filter (lambda (sublista) (member usuario sublista)) (get-chatHistory-system system))))))  

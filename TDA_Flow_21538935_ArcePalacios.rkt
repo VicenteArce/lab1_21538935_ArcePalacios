@@ -20,9 +20,9 @@
 ;Recursión: No aplica
 ;Descripción: Esta función toma argumentos asociados a un flujo, y retorna el flujo. En el caso de que
 ;se pasen opciones con un mismo id, el constructor tomara la opción del primer id como valido, siendo este el que se agregara al flujo.
-(define (flow id name . Option)
-  (if (and (integer? id) (string? name) (list? Option))  
-      (list id name (remove-duplicates Option equal-first-code?)) ;Si hay opciones con id duplicado, se considera el primero que encuentre.
+(define (flow id name-msg . Option)
+  (if (and (integer? id) (string? name-msg) (list? Option))  
+      (list id name-msg (remove-duplicates Option equal-first-code?)) ;Si hay opciones con id duplicado, se considera el primero que encuentre.
       (display "Error, los datos son erroneos asegurate de que tus tipos de datos sean correctos.")))
 
 ;------------------------Selectores------------------------
@@ -36,11 +36,11 @@
 
 ;Nombre función: get-name-flow
 ;Dominio: flow
-;Recorrido: name(String)
+;Recorrido: name-msg(String)
 ;Recursión: No aplica
 ;Descripción: Esta función toma como argumento un flujo y retorna el nombre del flujo
 
-(define get-name-flow (lambda (flujo) (cadr flujo)))
+(define get-name-msg-flow (lambda (flujo) (cadr flujo)))
 
 ;Nombre función: get-Option-flow
 ;Dominio: flow
@@ -62,10 +62,10 @@
   (lambda (flujo op)
     (if (not (member (get-code-option op) (map get-code-option (get-Option-flow flujo))))
         (append (list (get-id-flow flujo))
-                (list (get-name-flow flujo))
+                (list (get-name-msg-flow flujo))
                 (list (append (get-Option-flow flujo) (list op))))
         (append (list (get-id-flow flujo))
-                (list (get-name-flow flujo))
+                (list (get-name-msg-flow flujo))
                 (list (get-Option-flow flujo))))))
         
 
