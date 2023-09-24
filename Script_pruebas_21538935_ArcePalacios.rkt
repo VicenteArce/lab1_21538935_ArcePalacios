@@ -10,10 +10,6 @@
 (require "main.rkt")
 
 
-
-
-
-
 ;Chabot0
 (define op1 (option  1 "1) Viajar" 1 1 "viajar" "turistear" "conocer"))
 (define op2 (option  2 "2) Estudiar" 2 1 "estudiar" "aprender" "perfeccionarme"))
@@ -56,8 +52,7 @@
 (define s7 (system-login s6 "user1"))
 (define s8 (system-login s7 "user2"))
 (define s9 (system-logout s8))
-(define s19 (system-logout s9))
-(define s10 (system-login s19 "user2"))
+(define s10 (system-login s9 "user2"))
 ;las siguientes interacciones deben funcionar de igual manera con system-talk-rec  o system-talk-norec 
 (define s11 (system-talk-norec s10 "hola"))
 (define s12 (system-talk-rec s11 "1"))
@@ -66,7 +61,12 @@
 (define s15 (system-talk-rec s14 "1"))
 (define s16 (system-talk-norec s15 "3"))
 (define s17 (system-talk-norec s16 "5"))
-(display (system-synthesis s17 "user2"))
+(define s18 (system-talk-rec s17 "4"))
+(define s19 (system-talk-rec s18 "2"))
+(define s20 (system-talk-norec s19 "Doctorado"))
+(define s21 (system-talk-rec s20 "Volver"))
+(display (system-synthesis s21 "user2"))
+;-------------------------------------------------------------------------------------------------
 
 
   
