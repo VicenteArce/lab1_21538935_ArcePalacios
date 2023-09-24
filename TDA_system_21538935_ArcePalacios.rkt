@@ -122,14 +122,7 @@
                 (list (get-logUsers-system system))
                 (list (get-actualChatbotCodeLink-system system))
                 (list (get-actualFlowCodeLink-system system)))
-        (append (list (get-name-system system))
-                (list (get-InitialChatbotCodeLink-system system))
-                (list (get-chatbots-system system))
-                (list (get-chatHistory-system system))
-                (list (get-users-system system))
-                (list (get-logUsers-system system))
-                (list (get-actualChatbotCodeLink-system system))
-                (list (get-actualFlowCodeLink-system system))))))
+        system)))
 
 ;Nombre función: system-add-user
 ;Dominio: system X user(String)
@@ -148,14 +141,7 @@
                 (list (get-logUsers-system system))
                 (list (get-actualChatbotCodeLink-system system))
                 (list (get-actualFlowCodeLink-system system)))
-        (append (list (get-name-system system))
-                (list (get-InitialChatbotCodeLink-system system))
-                (list (get-chatbots-system system))
-                (list (get-chatHistory-system system))
-                (list (get-users-system system))
-                (list (get-logUsers-system system))
-                (list (get-actualChatbotCodeLink-system system))
-                (list (get-actualFlowCodeLink-system system))))))
+        system)))
 
 ;Nombre función: system-login
 ;Dominio: system X user(String)
@@ -174,14 +160,7 @@
                 (list (append (get-logUsers-system system) (list user)))
                 (list (get-actualChatbotCodeLink-system system))
                 (list (get-actualFlowCodeLink-system system)))
-        (append (list (get-name-system system))
-                (list (get-InitialChatbotCodeLink-system system))
-                (list (get-chatbots-system system))
-                (list (get-chatHistory-system system))
-                (list (get-users-system system))
-                (list (get-logUsers-system system))
-                (list (get-actualChatbotCodeLink-system system))
-                (list (get-actualFlowCodeLink-system system))))))
+        system)))
 
 
 ;Nombre función: system-logout
@@ -192,14 +171,16 @@
 
 (define system-logout
   (lambda (system)
-    (append (list (get-name-system system))
+    (if (not (empty? (get-logUsers-system system))) ;Pregunta si hay usuarios logueados en el sistema, en el caso de que si hayan, desloguea al usuario, en el otro caso , devuelve el mismo sistema
+        (append (list (get-name-system system))
             (list (get-InitialChatbotCodeLink-system system))
             (list (get-chatbots-system system))
             (list (get-chatHistory-system system))
             (list (get-users-system system))
             (list (cdr (get-logUsers-system system)))
             (list (get-actualChatbotCodeLink-system system))
-            (list (get-actualFlowCodeLink-system system)))))
+            (list (get-actualFlowCodeLink-system system)))
+        system)))
 
 
 

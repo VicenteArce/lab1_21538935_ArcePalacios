@@ -13,35 +13,42 @@
 
 
 ;------------------------Selectores------------------------
-;Nombre función: get-chatHistory-user
+;Nombre función: get-user-chatHistory
 ;Dominio: chatHistory
 ;Recorrido: user (String)
 ;Recursión: no aplica
 ;Descripción: Retorna el usuario de un chatHistory
-(define get-chatHistory-user (lambda (chatHistory) (car chatHistory)))
+(define get-user-chatHistory (lambda (chatHistory) (car chatHistory)))
 
 
-;Nombre función:get-chatHistory-Historial
+;Nombre función: get-Historial-chatHistory
 ;Dominio:chatHistory
 ;Recorrido: chatHistory
 ;Recursion: no aplica
 ;Descripción: Retorna el historial de un usuario
-(define get-chatHistory-Historial (lambda (chatHistory) (cadr chatHistory)))
+(define get-Historial-chatHistory (lambda (chatHistory) (cadr chatHistory)))
 
 
 ;------------------------Modificadores------------------------
 ;Nombre add-chatHistory-user
 ;Dominio:chatHistory X user(String) X message(String) X name-chatbot(String) X name-flow(String) X message-sys(String de opciones)
 ;Recorrido: chatHistory
-;Recursion: Natural (deja estado pensiente hata encontrar el usuario)
+;Recursion: Natural (deja estado pensdiente hata encontrar el usuario)
 ;Descripción: Retorna el historial añadiendo texto al hitsorial de un usuario dado
 
-(define set-chatHistory-Historial (lambda (chatH user message name-chatbot name-flow message-sys)
-                                    (if (and (member user (map car chatH)) (equal? user (get-chatHistory-user (car chatH))))
-                                        (if (not (empty? (get-chatHistory-Historial (car chatH))))                                            
-                                            (append (list (list user (list (string-append (car (get-chatHistory-Historial (car chatH))) "\n" (~v (current-seconds)) "-" user  ": " message "\n"
-                                                                                          (~v (current-seconds)) "-"name-chatbot ": " name-flow ": \n" message-sys "\n\n")))) (cdr chatH))                                        
+(define set-Historial-chatHistory (lambda (chatH user message name-chatbot name-flow message-sys)
+                                    (if (and (member user (map car chatH)) (equal? user (get-user-chatHistory (car chatH))))
+                                        (if (not (empty? (get-Historial-chatHistory (car chatH))))                                            
+                                            (append (list (list user (list (string-append (car (get-Historial-chatHistory (car chatH))) "\n" (~v (current-seconds)) "-" user  ": " message "\n"
+                                                                                          (~v (current-seconds)) "-" name-chatbot ": " name-flow ": \n " message-sys "\n\n")))) (cdr chatH))                                        
                                             (append (list (list user (list (string-append (~v (current-seconds)) "-" user ": " message "\n"
                                                                                           (~v (current-seconds)) "-" name-chatbot ": " name-flow ": \n " message-sys "\n\n")))) (cdr chatH)))
-                                        (append (list (car chatH)) (set-chatHistory-Historial (cdr chatH) user message name-chatbot name-flow message-sys)))))
+                                        (append (list (car chatH)) (set-Historial-chatHistory (cdr chatH) user message name-chatbot name-flow message-sys)))))
                                   
+
+
+
+
+
+
+
