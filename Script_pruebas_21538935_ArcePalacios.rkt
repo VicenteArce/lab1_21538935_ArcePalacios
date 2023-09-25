@@ -61,12 +61,9 @@
 (define s15 (system-talk-rec s14 "1"))
 (define s16 (system-talk-norec s15 "3"))
 (define s17 (system-talk-norec s16 "5"))
-(define s18 (system-talk-rec s17 "4"))
-(define s19 (system-talk-rec s18 "2"))
-(define s20 (system-talk-norec s19 "Doctorado"))
-(define s21 (system-talk-rec s20 "Volver"))
-(display (system-synthesis s21 "user2"))
-;-------------------------------------------------------------------------------------------------
+(display (system-synthesis s17 "user2"))
+(define s18 (system-simulate s17 5 32131))
+
 
 
   

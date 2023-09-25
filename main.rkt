@@ -5,6 +5,7 @@
 (require "TDA_Flow_21538935_ArcePalacios.rkt")
 (require "TDA_chatbot_21538935_ArcePalacios.rkt")
 (require "TDA_system_21538935_ArcePalacios.rkt")
+(require "TDA_user_21538935_ArcePalacios.rkt")
 (require "TDA_chatHistory_21538935_ArcePalacios.rkt")
 
 ;Nombre Función: system-talk-rec
@@ -113,20 +114,20 @@
 ;Descripción: Funcion que toma un sistema y un mensaje, si hay un usuario logeado, entonces se actualizara el sistema, actualizando el actualCbotLink, actualFlowLink y Actualiza el Historial del usuario logeado (String formateado).
 ;PD: Cuando en el sistema no hay ningun usuario logeado se devolvera el mismo sistema, si hay un usuario logeado entonces ahi se procedera a incluir las modificaciones, en el chatHistory del usuario logeado.
 ;    Ademas, si ya se hizo la llamada a la funcion y se deslogea el usuario, su chatHistory se guardara y el sistema se "reiniciara", para cuando un usuario proceda a logearse el sistema empiece desde 0
-;(Si bien la implementacion no usa recursion, si se tienen funciones auxiliares creadas dentro de esta que tampoco usan recursión, cabe destacar que el uso de system-talk-norec o system-talk-rec retornara lo mismo)
-;La unica diferencia en el recorrido entre system-talk-norec y system-talk-rec es que desordenda el orden de los chatHistory, es decir permuta el orden de estos dependiendo de su uso, en la practica esta diferencia no es relevante
+;   (Si bien la implementacion no usa recursion, si se tienen funciones auxiliares creadas dentro de esta que tampoco usan recursión, cabe destacar que el uso de system-talk-norec o system-talk-rec retornara lo mismo)
+;   La unica diferencia en el recorrido entre system-talk-norec y system-talk-rec es que desordenda el orden de los chatHistory, es decir permuta el orden de estos dependiendo de su uso, en la practica esta diferencia no es relevante
 
 (define system-talk-norec
   (lambda (system message)
-    (define get-CbotByID
+    (define get-CbotByID-norec
       (lambda(chatbots ID)
         (car (filter (lambda (sublista) (= (get-chatbotID-chatbot sublista) ID)) chatbots)))) 
       
-    (define get-FlowByID
+    (define get-FlowByID-norec
       (lambda (flows ID)
         (car (filter (lambda (sublista) (= (get-id-flow sublista) ID)) flows))))
 
-    (define get-OptionByID-STR
+    (define get-OptionByID-STR-norec
       (lambda (options ID_STR)
         (if (number? (string->number ID_STR))
             (car (filter (lambda (sublista) (= (get-id-flow sublista) (string->number ID_STR))) options))
@@ -157,15 +158,15 @@
                     (list (set-Historial-chatHistory-norec (get-chatHistory-system system)
                                                      (car (get-logUsers-system system))
                                                      message
-                                                     (get-name-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
-                                                     (get-name-msg-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
-                                                                                      (get-startFlowId-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))))
-                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
-                                                                                                         (get-startFlowId-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))))))))
+                                                     (get-name-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
+                                                     (get-name-msg-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
+                                                                                      (get-startFlowId-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))))
+                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))
+                                                                                                         (get-startFlowId-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))))))))
                     (list (get-users-system system))
                     (list (get-logUsers-system system))
                     (list (get-actualChatbotCodeLink-system system))
-                    (list (get-startFlowId-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))))
+                    (list (get-startFlowId-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system)))))
             
             (append (list (get-name-system system))
                     (list (get-InitialChatbotCodeLink-system system))
@@ -173,7 +174,7 @@
                     (list (get-chatHistory-system system))
                     (list (get-users-system system))
                     (list (get-logUsers-system system))
-                    (list (get-actualChatbotCodeLink-system system))
+                    (list (get-InitialChatbotCodeLink-system system))
                     (list -1)))
 
         (if (not (empty? (get-logUsers-system system))) ;Como el sistema ya se uso, entonces se tendra en cuenta la actualización de los ChatbotCodeLink Y FlowCodeLink en relacion a la opcion escogida por el usuario (mensaje)
@@ -183,15 +184,15 @@
                     (list (set-Historial-chatHistory-norec (get-chatHistory-system system)
                                                      (car (get-logUsers-system system))
                                                      message
-                                                     (get-name-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
-                                                     (get-name-msg-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
-                                                                                      (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
-                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
-                                                                                                         (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))))))
+                                                     (get-name-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                     (get-name-msg-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                                                      (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                                                                         (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))))))
                     (list (get-users-system system))
                     (list (get-logUsers-system system))
-                    (list (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))
-                    (list (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                    (list (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))
+                    (list (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
 
             (append (list (get-name-system system))
                     (list (get-InitialChatbotCodeLink-system system))
@@ -199,7 +200,7 @@
                     (list (get-chatHistory-system system))
                     (list (get-users-system system))
                     (list (get-logUsers-system system))
-                    (list (get-actualChatbotCodeLink-system system))
+                    (list (get-InitialChatbotCodeLink-system system))
                     (list -1))))
     ))
 ;---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -215,10 +216,79 @@
           (display "Tu usuario no tiene un historial"))
       (display "Tu usuario no esta registrado en el sistema")))
 
+;---------------------------------------------------------------------------------------------------------------------------------------------------
+(define (myRandom Xn)
+  (modulo (+ (* 1103515245 Xn) 12345) 2147483648)
+)
+
+(define system-simulate
+  (lambda (system maxInteractions seed)
+   
+    (define get-CbotByID-ss
+      (lambda(chatbots ID)
+        (car (filter (lambda (sublista) (= (get-chatbotID-chatbot sublista) ID)) chatbots))))
+    
+     (define get-FlowByID-ss
+      (lambda (flows ID)
+        (car (filter (lambda (sublista) (= (get-id-flow sublista) ID)) flows))))
+
+    (define obtener-mayor-ss
+      (lambda (lista)
+        (if (empty? (cdr lista))
+            (car lista)
+            (if (> (car lista) (cadr lista))
+                (obtener-mayor-ss (remove (cadr lista) lista))
+                (obtener-mayor-ss (remove (car lista) lista ))))))
+    
+    (define (NumberOptions-ss system actualCbotCodeLink actualFlowCodeLink)
+      (obtener-mayor-ss (map get-code-option (get-Option-flow (get-FlowByID-ss (get-flows-chatbot (get-CbotByID-ss (get-chatbots-system system) actualCbotCodeLink)) actualFlowCodeLink)))))
+
+    (define set-RandomChoose
+      (lambda (seed system actualCbotCodeLink actualFlowCodeLink)
+        (+ 1 (modulo seed (NumberOptions-ss system actualCbotCodeLink actualFlowCodeLink)))))
+    
+    (if (not (< maxInteractions 0))
+             (if (empty? (cdddr (cdddr (cddr system))))
+                 (system-simulate (append (system-talk-rec (system-login (system-add-user (system-logout system) (make-user seed)) (make-user seed)) "Hola") (list seed)) (- maxInteractions 1) (myRandom seed))
+                 (system-simulate (append (system-talk-rec system (number->string (set-RandomChoose seed system (get-actualChatbotCodeLink-system system) (get-actualFlowCodeLink-system system)))) (list (cadddr (cdddr (cddr system))) )) (- maxInteractions 1) (myRandom seed)))
+             (system-logout system))))
 
 
+#|(define system-simulate
+  (lambda (system maxInteractions seed)
+    (define (user-seed seed) (string-append "user" (number->string seed)))
 
+    (define get-CbotByID
+      (lambda(chatbots ID)
+        (car (filter (lambda (sublista) (= (get-chatbotID-chatbot sublista) ID)) chatbots))))
 
+    (define get-FlowByID
+      (lambda (flows ID)
+        (car (filter (lambda (sublista) (= (get-id-flow sublista) ID)) flows))))
+
+    (define obtener-mayor
+      (lambda (lista)
+        (if (empty? (cdr lista))
+            (car lista)
+            (if (> (car lista) (cadr lista))
+                (obtener-mayor (remove (cadr lista) lista))
+                (obtener-mayor (remove (car lista) lista ))))))
+    
+    (define (NumberOptions system actualCbotLink actualFlowLink)
+      (obtener-mayor (map get-code-option (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) actualCbotLink)) actualFlowLink)))))
+    
+    (define (set-RandomChoose seed system actualCbotLink actualFlowLink)
+      (+ 1 (modulo (myRandom seed) (NumberOptions system actualCbotLink actualFlowLink))))
+    
+    (if (not (= maxInteractions 0)) 
+        (if (not (member (user-seed seed) (get-logUsers-system system)))
+            (system-simulate (system-talk-rec (system-login (system-add-user (system-logout system) (user-seed seed)) (user-seed seed)) "Hola") (- maxInteractions 1) seed)
+            (system-simulate (system-talk-rec system (set-RandomChoose seed system (get-actualChatbotCodeLink-system system) (get-actualFlowCodeLink-system system))) (- maxInteractions 1) (set-RandomChoose seed system (get-actualChatbotCodeLink-system system) (get-actualFlowCodeLink-system system))))
+        system)
+    
+    
+    ))
+|#
 
 
 

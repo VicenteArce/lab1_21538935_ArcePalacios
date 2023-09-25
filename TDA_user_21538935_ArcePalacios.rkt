@@ -1,11 +1,6 @@
 #lang racket
-
+(provide (all-defined-out))
 ;------------------------Constructor
-(define user (lambda (name) (list name)))
+(define make-user (lambda (numero) (string-append "user" (number->string numero))))
 
 
-;------------------------Selector
-(define get-user (lambda (user) (car user)))
-
-;------------------------Modificador
-(define set-user (lambda (user name) (list name)))

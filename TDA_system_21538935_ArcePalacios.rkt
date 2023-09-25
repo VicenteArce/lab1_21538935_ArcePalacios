@@ -28,7 +28,7 @@
   (if (and (string? name) (integer? InitialChatbotCodeLink) (list? chatbot) )
       (list name InitialChatbotCodeLink (remove-duplicates chatbot equal-first-chatbotID?) '() '() '() InitialChatbotCodeLink -1) ;Las tres listas vacias son: chatHistory, usuarios en el sistema, usuarios logeados.
       (display "Error, ingresa bien los datos")))                                                                                 ;Además, los ultimos dos valores son: ChatbotActual del sistema y FlowActual del sistema
-                                                                                                                                  ;el sistema tendra un -1 como flujoActual, este se ira actualizando a medida que se llamen diversas funciones
+;el sistema tendra un -1 como flujoActual, este se ira actualizando a medida que se llamen diversas funciones
 
 ;------------------------Selectores------------------------
 ;Nombre de Función: get-name-system
@@ -173,14 +173,21 @@
   (lambda (system)
     (if (not (empty? (get-logUsers-system system))) ;Pregunta si hay usuarios logueados en el sistema, en el caso de que si hayan, desloguea al usuario, en el otro caso , devuelve el mismo sistema
         (append (list (get-name-system system))
-            (list (get-InitialChatbotCodeLink-system system))
-            (list (get-chatbots-system system))
-            (list (get-chatHistory-system system))
-            (list (get-users-system system))
-            (list (cdr (get-logUsers-system system)))
-            (list (get-actualChatbotCodeLink-system system))
-            (list (get-actualFlowCodeLink-system system)))
-        system)))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (cdr (get-logUsers-system system)))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list -1))
+        (append (list (get-name-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list (get-chatbots-system system))
+                (list (get-chatHistory-system system))
+                (list (get-users-system system))
+                (list (get-logUsers-system system))
+                (list (get-InitialChatbotCodeLink-system system))
+                (list -1)))))
 
 
 
