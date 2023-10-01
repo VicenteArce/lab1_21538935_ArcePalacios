@@ -62,8 +62,7 @@
 (define s16 (system-talk-norec s15 "3"))
 (define s17 (system-talk-norec s16 "5"))
 (display (system-synthesis s17 "user2"))
-(define s18 (system-simulate s17 5 32131))
-
+;(display (system-synthesis (system-simulate s0 5 312321) "user312321"))
 
 
   

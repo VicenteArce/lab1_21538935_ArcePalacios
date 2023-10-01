@@ -24,11 +24,10 @@
 ;Recursión: de cola (al verificar si existen chatbots repetidos
 ;Descripción: Función constructora de sistemas que contienen chatbots, historial de chats y usuarios
 
-(define (system name InitialChatbotCodeLink . chatbot)
-  (if (and (string? name) (integer? InitialChatbotCodeLink) (list? chatbot) )
-      (list name InitialChatbotCodeLink (remove-duplicates chatbot equal-first-chatbotID?) '() '() '() InitialChatbotCodeLink -1) ;Las tres listas vacias son: chatHistory, usuarios en el sistema, usuarios logeados.
-      (display "Error, ingresa bien los datos")))                                                                                 ;Además, los ultimos dos valores son: ChatbotActual del sistema y FlowActual del sistema
-;el sistema tendra un -1 como flujoActual, este se ira actualizando a medida que se llamen diversas funciones
+(define system (lambda (name InitialChatbotCodeLink . chatbot)
+    (list name InitialChatbotCodeLink (remove-duplicates chatbot equal-first-chatbotID?) '() '() '() InitialChatbotCodeLink -1)));Las tres listas vacias son: chatHistory, usuarios en el sistema, usuarios logeados.
+                                                                                                                                   ;Además, los ultimos dos valores son: ChatbotActual del sistema y FlowActual del sistema
+                                                                                                                                   ;el sistema tendra un -1 como flujoActual, este se ira actualizando a medida que se llamen diversas funciones
 
 ;------------------------Selectores------------------------
 ;Nombre de Función: get-name-system

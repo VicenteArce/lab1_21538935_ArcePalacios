@@ -15,26 +15,14 @@
 (define (equal-first-id? l1 l2)
   (equal? (get-id-flow l1) (get-id-flow l2)))
 
-;Nombre función: append-final
-;Dominio; flow X lista(de flujos del chatbot)
-;Recorrido: chatbot
-;Recursión: natural
-;Descripción: Esta función se llama en el modificador para poder agregar al final de la lista de flujos el nuevo flujo en cuestion
-(define (append-final flujo lista-flujos-chatbot)
-  (if (null? lista-flujos-chatbot)
-      (list flujo)
-      (cons (car lista-flujos-chatbot) (append-final flujo (cdr lista-flujos-chatbot)))))
-
 ;------------------Constructor------------------
 ;Nombre función: chatbot
 ;Dominio: chatbotID(int) X name(String) X welcomeMessage(String) X startFlowId(int) X flows(0 o más opciones)
 ;Recorrido: chatbot
 ;Recursión: No aplica
 ;Descripción: Esta función toma argumentos asociados a un chatbot, y retorna el chatbot.
-(define (chatbot chatbotID name welcomeMessage startFlowId . flows)
-  (if (and (integer? chatbotID) (string? name) (string? welcomeMessage) (list? flows))
-      (list chatbotID name welcomeMessage startFlowId (remove-duplicates flows equal-first-id?))
-      (display "Error, los datos son erroneos, verifica si los tipos de datos son correctos")))
+(define chatbot (lambda (chatbotID name welcomeMessage startFlowId . flows)
+  (list chatbotID name welcomeMessage startFlowId (remove-duplicates flows equal-first-id?))))
 
 ;-----------------Selectores--------------------
 ;Nombre función: get-id-chatbot
@@ -83,8 +71,7 @@
   (lambda (cbot)
     (cadddr (cdr cbot))))
 
-
-;--------------Modificadores-------------------
+;------------------------Modificadores---------------------
 ;Nombre función: chatbot-add-flow
 ;Dominio: chatbot X flow
 ;Recorrido: chatbot 
@@ -94,6 +81,11 @@
 
 (define chatbot-add-flow
   (lambda (chatbot flow)
+    (define (append-final flujo lista-flujos-chatbot)
+      (if (null? lista-flujos-chatbot)
+          (list flujo)
+          (cons (car lista-flujos-chatbot) (append-final flujo (cdr lista-flujos-chatbot)))))
+
     (if (not (member (get-id-flow flow) (map get-id-flow (get-flows-chatbot chatbot))))
         (append (list (get-chatbotID-chatbot chatbot))
                 (list (get-name-chatbot chatbot))

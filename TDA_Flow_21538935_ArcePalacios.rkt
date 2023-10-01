@@ -20,10 +20,8 @@
 ;Recursión: No aplica
 ;Descripción: Esta función toma argumentos asociados a un flujo, y retorna el flujo. En el caso de que
 ;se pasen opciones con un mismo id, el constructor tomara la opción del primer id como valido, siendo este el que se agregara al flujo.
-(define (flow id name-msg . Option)
-  (if (and (integer? id) (string? name-msg) (list? Option))  
-      (list id name-msg (remove-duplicates Option equal-first-code?)) ;Si hay opciones con id duplicado, se considera el primero que encuentre.
-      (display "Error, los datos son erroneos asegurate de que tus tipos de datos sean correctos.")))
+(define flow (lambda (id name-msg . Option)
+      (list id name-msg (remove-duplicates Option equal-first-code?))))
 
 ;------------------------Selectores------------------------
 ;Nombre función: get-id-flow
@@ -49,7 +47,6 @@
 ;Descripción: Esta función toma como argumento un flujo y retorna una lista de opciones que contiene el flujo
 
 (define get-Option-flow (lambda (flujo) (caddr flujo)))
-
 
 ;------------------------Modificadores------------------------
 ;Nombre: flow-add-option

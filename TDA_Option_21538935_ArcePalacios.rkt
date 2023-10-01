@@ -1,7 +1,5 @@
 #lang racket
 (provide (all-defined-out))
-;(define op1 (option 1 "1) Viajar" 2 4 "viajar" "turistear" "conocer"))
-;(define op2 (option 2 "2) Estudiar" 4 3 "aprender" "perfeccionarme"))
 
 ;------------------------Constructor------------------------
 ;Nombre función: option
@@ -9,8 +7,10 @@
 ;Recorrido: option
 ;Recursión: No aplica
 ;Descripción: Esta función toma argumentos asociados a una opción, como podrian ser el codigo de la opción, a su vez retorna una opción como una lista.
-(define (option code message ChatbotCodeLink InitialFlowCodeLink . Keyword)
-      (list code message ChatbotCodeLink InitialFlowCodeLink Keyword))
+;             Para no tener problemas con el case-sensitive se decide
+(define option (lambda (code message ChatbotCodeLink InitialFlowCodeLink . Keyword)
+      (list code message ChatbotCodeLink InitialFlowCodeLink (map string-downcase Keyword))))
+      
 
 ;------------------------Selectores------------------------
 ;Nombre función: get-code-option
@@ -55,7 +55,6 @@
 ;Descripción: Retorna la lista de palabras claves de la opción
 (define (get-Keywords-option option)
   (cadddr (cdr option)))
-
 
 
 
