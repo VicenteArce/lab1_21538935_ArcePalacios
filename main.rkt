@@ -44,7 +44,7 @@
             (if (= (get-code-option (car options)) (string->number ID_STR))
                 (car options)
                 (get-OptionByID-STR (cdr options) ID_STR))
-            (if (member ID_STR (get-Keywords-option (car options)))
+            (if (member (string-downcase ID_STR) (get-Keywords-option (car options)))
                 (car options)
                 (get-OptionByID-STR (cdr options) ID_STR)))))
 
@@ -98,15 +98,15 @@
                     (list (set-Historial-chatHistory (get-chatHistory-system system)
                                                      (car (get-logUsers-system system))
                                                      message
-                                                     (get-name-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
-                                                     (get-name-msg-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
-                                                                                      (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
-                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
-                                                                                                         (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message)))))))))
+                                                     (get-name-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                     (get-name-msg-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                                                      (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                                                                         (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))))))
                     (list (get-users-system system))
                     (list (get-logUsers-system system))
-                    (list (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message)))))
-                    (list (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
+                    (list (get-ChatbotCodeLink-option (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))
+                    (list (get-startFlowId-chatbot (get-OptionByID-STR (get-Option-flow (get-FlowByID (get-flows-chatbot (get-CbotByID (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
 
             (append (list (get-name-system system))
                     (list (get-InitialChatbotCodeLink-system system))
@@ -144,7 +144,7 @@
       (lambda (options ID_STR)
         (if (number? (string->number ID_STR))
             (car (filter (lambda (sublista) (= (get-id-flow sublista) (string->number ID_STR))) options))
-            (car (filter (lambda (sublista) (member ID_STR (get-Keywords-option sublista))) options)))))
+            (car (filter (lambda (sublista) (member (string-downcase ID_STR) (get-Keywords-option sublista))) options)))))
 
     ;Funcion que se encarga de dar formato a las opciones 
     (define get-FormatedOptions
@@ -197,15 +197,15 @@
                     (list (set-Historial-chatHistory-norec (get-chatHistory-system system)
                                                      (car (get-logUsers-system system))
                                                      message
-                                                     (get-name-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
+                                                     (get-name-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
                                                      (get-name-msg-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
-                                                                                      (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
-                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
-                                                                                                         (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message)))))))))
+                                                                                      (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                     (get-FormatedOptions (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
+                                                                                                         (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))))))
                     (list (get-users-system system))
                     (list (get-logUsers-system system))
-                    (list (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message)))))
-                    (list (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) (if (number? message) message (string-downcase message))))))
+                    (list (get-ChatbotCodeLink-option (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message)))
+                    (list (get-startFlowId-chatbot (get-OptionByID-STR-norec (get-Option-flow (get-FlowByID-norec (get-flows-chatbot (get-CbotByID-norec (get-chatbots-system system) (get-actualChatbotCodeLink-system system))) (get-actualFlowCodeLink-system system))) message))))
 
             (append (list (get-name-system system))
                     (list (get-InitialChatbotCodeLink-system system))
