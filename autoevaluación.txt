@@ -1,0 +1,16 @@
+Requirimientos Funcionales	Evaluación
+TDAs				    1
+option                              1
+flow				    1
+flow-add-option			    1
+chatbot				    1
+chatbot-add-flow		    1
+system				    1
+system-add-chatbot		    1
+system-add-user			    1
+system-login			    1
+system-logout			    1
+system-talk-rec			    1
+system-talk-norec		    1
+system-synthesis		    1
+system-simulate			    1
