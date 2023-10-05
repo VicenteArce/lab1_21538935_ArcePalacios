@@ -1,0 +1,1 @@
+Para la ejecución del Script_de_pruebas, basta clonar el repositorio de github y ejecutar el script de pruebas, cabe destacar la importancia de tener todos los archivos del codigo fuente en una misma carpeta, de lo contrario no funcionara. Ademas en la autoevaluación se describe en donde se encuentra cada requisito funcional.
