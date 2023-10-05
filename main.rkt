@@ -225,9 +225,9 @@
 (define (system-synthesis system usuario) 
   (if (not (empty? (filter (lambda (sublista) (member usuario sublista)) (get-chatHistory-system system))))
       (if (not (empty? (get-Historial-chatHistory (car (filter (lambda (sublista) (member usuario sublista)) (get-chatHistory-system system))))))
-          (car (get-Historial-chatHistory (car (filter (lambda (sublista) (member usuario sublista)) (get-chatHistory-system system)))))
-          (display "Tu usuario no tiene un historial"))
-      (display "Tu usuario no esta registrado en el sistema")))
+          (string-append "\n---------" (string-upcase usuario) "---------\n" (car (get-Historial-chatHistory (car (filter (lambda (sublista) (member usuario sublista)) (get-chatHistory-system system))))))
+          (string-append "\n---------" (string-upcase usuario) "---------\n" "Tu usuario no tiene un historial\n"))
+      (string-append "\n---------" (string-upcase usuario) "---------\n" "Tu usuario no esta registrado en el sistema\n")))
 
 ;---------------------------------------------------------------------------------------------------------------------------------------------------
 ;Nombre función: myRandom

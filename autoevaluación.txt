@@ -1,16 +1,16 @@
-Requirimientos Funcionales	Evaluación
-TDAs				    1
-option                              1
-flow				    1
-flow-add-option			    1
-chatbot				    1
-chatbot-add-flow		    1
-system				    1
-system-add-chatbot		    1
-system-add-user			    1
-system-login			    1
-system-logout			    1
-system-talk-rec			    1
-system-talk-norec		    1
-system-synthesis		    1
-system-simulate			    1
+Nombre-archivo	      Requirimientos Funcionales	Autoevaluación
+--------------			TDAs			      1
+TDA_Option  		       option                         1
+TDA_FLow		        flow			      1
+TDA_Flow		   flow-add-option		      1
+TDA_chatbot		      chatbot			      1
+TDA_chatbot		   chatbot-add-flow	              1
+TDA_system		       system			      1
+TDA_system		  system-add-chatbot	              1
+TDA_system		    system-add-user		      1
+TDA_system		    system-login		      1
+TDA_system	            system-logout		      1
+main			   system-talk-rec		      1
+main			  system-talk-norec	              1
+main			   system-synthesis	              1
+main			   system-simulate		      1
