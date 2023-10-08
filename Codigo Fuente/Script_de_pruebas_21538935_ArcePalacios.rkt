@@ -7,7 +7,7 @@
 (require "TDA_system_21538935_ArcePalacios.rkt")
 (require "TDA_chatHistory_21538935_ArcePalacios.rkt")
 (require "TDA_user_21538935_ArcePalacios.rkt")
-(require "main.rkt")
+(require "main_21538935_ArcePalacios.rkt")
 
 
 ;----------------------------------option----------------------------------
